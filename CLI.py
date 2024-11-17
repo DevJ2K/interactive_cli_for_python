@@ -7,6 +7,7 @@ from Colors import *
 
 class CLI:
 	def __init__(self) -> None:
+		# Use a dictionary instead of list, it will be more practical to remove or retrieve options from the CLI.
 		self.options: list[tuple[str, bool]] = []
 		self.index = 0
 		self.fd = sys.stdin.fileno()
