@@ -31,7 +31,7 @@ class CLI:
 			else:
 				content += f"- {self.options[i][0]}\n"
 
-		return content
+		return content[:-1]
 
 	def add_option(self, option: str, value: bool = False):
 		self.options.append((option, value))
@@ -40,6 +40,26 @@ class CLI:
 	def remove_option(self, option: str):
 		pass
 
+	def test(self):
+		LINE_UP = '\033[1A'
+		LINE_CLEAR = '\x1b[2K'
+
+		import time
+		print(self)
+
+		time.sleep(1)
+		self.index = 2
+		for _ in range(len(self.options)):
+			print(LINE_UP, end=LINE_CLEAR)
+		print(self)
+
+		time.sleep(1)
+		self.index = 1
+		for _ in range(len(self.options)):
+			print(LINE_UP, end=LINE_CLEAR)
+		print(self)
+
+		time.sleep(1)
 
 	def run():
 		pass
@@ -52,7 +72,8 @@ if __name__ == "__main__":
 	cli.add_option("Option 3", True)
 	cli.add_option("Option 4", False)
 
-	print(cli)
+	# print(cli)
+	cli.test()
 
 
 if __name__ == "2__main__":
