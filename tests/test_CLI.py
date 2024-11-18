@@ -11,7 +11,7 @@ def test_add_valid_option():
 	cli.add_option("option2", "dest", True)
 	cli.add_option("option3", "dest", True)
 	cli.add_option("option4", "dest", False)
-	assert cli.options == {
+	assert cli.get_options(True) == {
 		"option1": ["dest", False],
 		"option2": ["dest", True],
 		"option3": ["dest", True],
@@ -43,7 +43,7 @@ def test_remove_options():
 	cli.add_option("option6", "dest", False)
 
 	cli.remove_options("option3", "option6", "option1")
-	assert cli.options == {
+	assert cli.get_options(True) == {
 		"option2": ["dest", True],
 		"option4": ["dest", False],
 		"option5": ["dest", False],
