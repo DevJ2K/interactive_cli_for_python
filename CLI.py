@@ -4,12 +4,16 @@ import sys
 import os
 from Colors import *
 
+class CLIError(Exception):
+	pass
 
 class CLI:
-	def __init__(self) -> None:
+	def __init__(self, title: str) -> None:
 		# Use a dictionary instead of list, it will be more practical to remove or retrieve options from the CLI.
-		self.options: list[tuple[str, bool]] = []
-		self.index = 0
+		self.title: str = title
+		# self.options: list[tuple[str, bool]] = []
+		self.options: dict[str, list[str, bool]] = {}
+		self.index: int = 0
 		self.fd = sys.stdin.fileno()
 		pass
 
@@ -17,29 +21,51 @@ class CLI:
 		if len(self.options) == 0:
 			return ""
 		content = ""
-		# ❯
-		for i in range(len(self.options)):
+		print(self.title)
+		for i, value in zip(range(len(self.options)), self.options.values()):
 			if self.index == i:
 				content += BHCYAN
 				content += "❯  "
 				content += RESET
 			else:
 				content += "   "
-			color = BHGREEN if self.options[i][1] == True else BHRED
+			color = BHGREEN if value[1] == True else BHRED
 			content += f"[{color}*{RESET}] "
 			if self.index == i:
-				content += f"{BHCYAN}- {UCYAN}{self.options[i][0]}{RESET}\n"
+				content += f"{BHCYAN}- {UCYAN}{value[0]}{RESET}\n"
 			else:
-				content += f"- {self.options[i][0]}\n"
-
+				content += f"- {value[0]}\n"
 		return content[:-1]
 
-	def add_option(self, option: str, value: bool = False):
-		self.options.append((option, value))
-		pass
+		# WITH LIST
+		# for i in range(len(self.options)):
+		# 	if self.index == i:
+		# 		content += BHCYAN
+		# 		content += "❯  "
+		# 		content += RESET
+		# 	else:
+		# 		content += "   "
+		# 	color = BHGREEN if self.options[i][1] == True else BHRED
+		# 	content += f"[{color}*{RESET}] "
+		# 	if self.index == i:
+		# 		content += f"{BHCYAN}- {UCYAN}{self.options[i][0]}{RESET}\n"
+		# 	else:
+		# 		content += f"- {self.options[i][0]}\n"
 
-	def remove_option(self, option: str):
-		pass
+		# return content[:-1]
+
+	def add_option(self, name: str, description: str, value: bool = False):
+		self.options[name] = [description, value]
+
+	def remove_option(self, *name: str):
+		if len(name) == 0:
+			return
+		print(name)
+		for i in range(len(name)):
+			try:
+				self.options.pop(name[i])
+			except:
+				print(f"Key '{name[i]}' not exist.")
 
 	def test(self):
 		LINE_UP = '\033[1A'
@@ -50,13 +76,13 @@ class CLI:
 
 		time.sleep(1)
 		self.index = 2
-		for _ in range(len(self.options)):
+		for _ in range(len(self.options) + 1):
 			print(LINE_UP, end=LINE_CLEAR)
 		print(self)
 
 		time.sleep(1)
 		self.index = 1
-		for _ in range(len(self.options)):
+		for _ in range(len(self.options) + 1):
 			print(LINE_UP, end=LINE_CLEAR)
 		print(self)
 
@@ -66,15 +92,18 @@ class CLI:
 		pass
 
 if __name__ == "__main__":
-	cli = CLI()
+	cli = CLI(title="Select an option.")
 
-	cli.add_option("Option 1")
-	cli.add_option("Option 2", True)
-	cli.add_option("Option 3", True)
-	cli.add_option("Option 4", False)
+	cli.add_option("Option1", "Option 1")
+	cli.add_option("Option2", "Option 2", True)
+	cli.add_option("Option3", "Option 3", True)
+	cli.add_option("Option4", "Option 4", False)
 
 	# print(cli)
-	cli.test()
+	# cli.test()
+	cli.remove_option("Salut", "les", "amis")
+	cli.remove_option("Option2")
+	print(cli)
 
 
 if __name__ == "2__main__":
