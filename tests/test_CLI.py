@@ -33,7 +33,7 @@ def test_add_invalid_option():
 	with pytest.raises(CLIError):
 		cli.add_option("opt", "", None)
 
-def test_remove_option():
+def test_remove_options():
 	cli = CLI("")
 	cli.add_option("option1", "dest", False)
 	cli.add_option("option2", "dest", True)
@@ -42,7 +42,7 @@ def test_remove_option():
 	cli.add_option("option5", "dest", False)
 	cli.add_option("option6", "dest", False)
 
-	cli.remove_option("option3", "option6", "option1")
+	cli.remove_options("option3", "option6", "option1")
 	assert cli.options == {
 		"option2": ["dest", True],
 		"option4": ["dest", False],
