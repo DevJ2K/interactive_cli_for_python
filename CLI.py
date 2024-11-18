@@ -8,13 +8,14 @@ class CLIError(Exception):
 	pass
 
 class CLI:
-	def __init__(self, title: str) -> None:
+	def __init__(self, title: str = "") -> None:
 		# Use a dictionary instead of list, it will be more practical to remove or retrieve options from the CLI.
 		self.title: str = title
 		# self.options: list[tuple[str, bool]] = []
 		self.options: dict[str, list[str, bool]] = {}
 		self.index: int = 0
-		self.fd = sys.stdin.fileno()
+		if __name__ == "__main__":
+			self.fd = sys.stdin.fileno()
 		pass
 
 	def __str__(self) -> str:
@@ -55,6 +56,15 @@ class CLI:
 		# return content[:-1]
 
 	def add_option(self, name: str, description: str, value: bool = False):
+		if type(name) != str:
+			raise CLIError("Invalid name type.")
+		if type(description) != str:
+			raise CLIError("Invalid description type.")
+		if type(value) != bool:
+			raise CLIError("Invalid value type.")
+		# print(name, type(name))
+		# print(description, type(description))
+		# print(value, type(value))
 		self.options[name] = [description, value]
 
 	def remove_option(self, *name: str):
@@ -98,7 +108,7 @@ if __name__ == "__main__":
 	cli.add_option("Option2", "Option 2", True)
 	cli.add_option("Option3", "Option 3", True)
 	cli.add_option("Option4", "Option 4", False)
-
+	exit(1)
 	# print(cli)
 	# cli.test()
 	cli.remove_option("Salut", "les", "amis")
